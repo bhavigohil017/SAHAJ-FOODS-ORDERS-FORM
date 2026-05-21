@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAHAJ FOODS - Order Request Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .required {
+            color: #ff6b6b;
+            margin-left: 3px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="text"]:read-only {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        select {
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Item Selection Styles */
+        .items-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .items-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 30px 2fr 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .item-row:hover {
+            border-color: #667eea;
+        }
+
+        .item-row.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .item-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-price {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .quantity-input:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        .item-subtotal {
+            font-weight: 700;
+            color: #28a745;
+            text-align: right;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .total-row.grand-total {
+            font-size: 1.5em;
+            font-weight: 700;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .item-quantity {
+                justify-content: space-between;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-content {
+                padding: 25px;
+            }
+        }
+
+        .order-number-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ SAHAJ FOODS</h1>
+            <p>Order Request Form</p>
+        </div>
+
+        <div class="form-content">
+            <div class="info-box">
+                <p>📋 Please fill out all required fields marked with <span class="required">*</span></p>
+            </div>
+
+            <form id="orderForm" onsubmit="handleSubmit(event)">
+                
+                <!-- Auto-Generated Order Number -->
+                <div class="order-number-display" id="orderNumberDisplay">
+                    Order #: <span id="displayOrderNum">Loading...</span>
+                </div>
+                <input type="hidden" id="orderNumber" name="orderNumber">
+
+                <!-- Order Requested By and Date -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="requestedBy">Order Requested By <span class="required">*</span></label>
+                        <select id="requestedBy" name="requestedBy" required>
+                            <option value="">-- Select Partner --</option>
+                            <option value="Ajendra">Ajendra</option>
+                            <option value="Jatin">Jatin</option>
+                            <option value="Akshay">Akshay</option>
+                            <option value="Bhavin">Bhavin</option>
+                            <option value="Himja">Himja</option>
+                            <option value="Saloni">Saloni</option>
+                            <option value="Mansi">Mansi</option>
+                            <option value="Twinkal">Twinkal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderDate">Date of Received Order <span class="required">*</span></label>
+                        <input type="date" id="orderDate" name="orderDate" required>
+                    </div>
+                </div>
+
+                <!-- Customer Information -->
+                <div class="form-group">
+                    <label for="customerName">Customer Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" name="customerName" placeholder="Enter customer name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerPhone">Customer Phone <span class="required">*</span></label>
+                        <input type="text" id="customerPhone" name="customerPhone" placeholder="Enter phone number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deliveryLocation">Delivery Location <span class="required">*</span></label>
+                        <input type="text" id="deliveryLocation" name="deliveryLocation" placeholder="Enter delivery address" required>
+                    </div>
+                </div>
+
+                <!-- Items Selection Section -->
+                <div class="items-section">
+                    <h3>🛒 Select Items & Quantities</h3>
+                    
+                    <div class="item-row" data-price="3.99">
+                        <input type="checkbox" class="item-checkbox" id="item1" onchange="updateItemRow(this)">
+                        <label for="item1" class="item-name">Sooji Panipuri(200g)</label>
+                        <span class="item-price">$3.99/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty1" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal1">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="4.49">
+                        <input type="checkbox" class="item-checkbox" id="item2" onchange="updateItemRow(this)">
+                        <label for="item2" class="item-name">Farsi puri (250g)</label>
+                        <span class="item-price">$4.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty2" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal2">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="4.49">
+                        <input type="checkbox" class="item-checkbox" id="item3" onchange="updateItemRow(this)">
+                        <label for="item3" class="item-name">Methi puri(200g)</label>
+                        <span class="item-price">$4.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty3" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal3">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="4.49">
+                        <input type="checkbox" class="item-checkbox" id="item4" onchange="updateItemRow(this)">
+                        <label for="item4" class="item-name">Chakri (250g)</label>
+                        <span class="item-price">$4.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty4" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal4">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="4.49">
+                        <input type="checkbox" class="item-checkbox" id="item5" onchange="updateItemRow(this)">
+                        <label for="item5" class="item-name">Namakpara (300g)</label>
+                        <span class="item-price">$4.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty5" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal5">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="2.99">
+                        <input type="checkbox" class="item-checkbox" id="item6" onchange="updateItemRow(this)">
+                        <label for="item6" class="item-name">Sev (300g)</label>
+                        <span class="item-price">$2.99/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty6" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal6">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="3.49">
+                        <input type="checkbox" class="item-checkbox" id="item7" onchange="updateItemRow(this)">
+                        <label for="item7" class="item-name">Tikha Gathiya (250g)</label>
+                        <span class="item-price">$3.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty7" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal7">$0</span>
+                    </div>
+
+                    <div class="item-row" data-price="5.49">
+                        <input type="checkbox" class="item-checkbox" id="item8" onchange="updateItemRow(this)">
+                        <label for="item8" class="item-name">Sakkarpara (350g)</label>
+                        <span class="item-price">$5.49/pack</span>
+                        <div class="item-quantity">
+                            <label>Qty:</label>
+                            <input type="number" class="quantity-input" id="qty8" min="1" value="1" disabled onchange="calculateTotal()">
+                        </div>
+                        <span class="item-subtotal" id="subtotal8">$0</span>
+                    </div>
+
+                </div>
+
+                <!-- Total Amount Section -->
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount">$0</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Tax (0%):</span>
+                        <span id="taxAmount">$0</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>TOTAL AMOUNT:</span>
+                        <span id="grandTotal">$0</span>
+                    </div>
+                </div>
+                <input type="hidden" id="totalOrderAmount" name="totalOrderAmount" value="0">
+
+                <!-- Estimated Delivery Date -->
+                <div class="form-group">
+                    <label for="estimatedDelivery">Estimated Delivery Date <span class="required">*</span></label>
+                    <input type="date" id="estimatedDelivery" name="estimatedDelivery" required>
+                </div>
+
+                <!-- Order Status -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderStatus">Order Status <span class="required">*</span></label>
+                        <select id="orderStatus" name="orderStatus" required>
+                            <option value="">-- Select Status --</option>
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Ready for Delivery">Ready for Delivery</option>
+                            <option value="Out for Delivery">Out for Delivery</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentStatus">Money Collection Status <span class="required">*</span></label>
+                        <select id="paymentStatus" name="paymentStatus" required>
+                            <option value="">-- Select Payment Status --</option>
+                            <option value="Not Collected" selected>Not Collected</option>
+                            <option value="Advance Paid">Advance Paid</option>
+                            <option value="Partial Payment">Partial Payment</option>
+                            <option value="Fully Paid">Fully Paid</option>
+                            <option value="COD">Cash on Delivery</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Amount Collected -->
+                <div class="form-group">
+                    <label for="amountCollected">Amount Collected ($)</label>
+                    <input type="number" id="amountCollected" name="amountCollected" placeholder="Enter amount collected" min="0" step="0.01" value="0">
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="form-group">
+                    <label for="notes">Additional Notes / Special Instructions</label>
+                    <textarea id="notes" name="notes" placeholder="Enter any special instructions or notes..." rows="4"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    📝 Submit Order Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Product catalog with prices
+        const products = [
+            { id: 1, name: 'Sooji Panipuri(200g)', price: 3.99 },
+            { id: 2, name: 'Farsi Puri (250g)', price: 4.49 },
+            { id: 3, name: 'Methi Puri (200g)', price: 4.49 },
+            { id: 4, name: 'Chakri (250g)', price: 4.49 },
+            { id: 5, name: 'Namakpara (300g)', price: 4.49 },
+            { id: 6, name: 'Sev (300g)', price: 2.99 },
+            { id: 7, name: 'Tikha Gathiya (250g)', price: 3.49 },
+            { id: 8, name: 'Sakkarpara (350g)', price: 5.49 },
+        ];
+
+        // Generate automated order number
+        function generateOrderNumber() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const hours = String(today.getHours()).padStart(2, '0');
+            const minutes = String(today.getMinutes()).padStart(2, '0');
+            const seconds = String(today.getSeconds()).padStart(2, '0');
+            const random = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            
+            const orderNum = `SF-${year}${month}${day}-${hours}${minutes}${seconds}-${random}`;
+            
+            document.getElementById('orderNumber').value = orderNum;
+            document.getElementById('displayOrderNum').textContent = orderNum;
+        }
+
+        // Set today's date as default
+        function setDefaultDates() {
+            const today = new Date();
+            document.getElementById('orderDate').valueAsDate = today;
+            
+            // Set estimated delivery to 3 days from now
+            const deliveryDate = new Date();
+            deliveryDate.setDate(deliveryDate.getDate() + 3);
+            document.getElementById('estimatedDelivery').valueAsDate = deliveryDate;
+        }
+
+        // Update item row when checkbox is clicked
+        function updateItemRow(checkbox) {
+            const row = checkbox.closest('.item-row');
+            const qtyInput = row.querySelector('.quantity-input');
+            
+            if (checkbox.checked) {
+                row.classList.add('selected');
+                qtyInput.disabled = false;
+                qtyInput.focus();
+            } else {
+                row.classList.remove('selected');
+                qtyInput.disabled = true;
+                qtyInput.value = 1;
+            }
+            
+            calculateTotal();
+        }
+
+        // Calculate total amount
+        function calculateTotal() {
+            let subtotal = 0;
+            const totalItems = products.length;
+
+            for (let i = 1; i <= totalItems; i++) {
+                const checkbox = document.getElementById(`item${i}`);
+                const qtyInput = document.getElementById(`qty${i}`);
+                const subtotalSpan = document.getElementById(`subtotal${i}`);
+                const row = checkbox.closest('.item-row');
+                const price = parseFloat(row.dataset.price);
+
+                if (checkbox.checked) {
+                    const qty = parseInt(qtyInput.value) || 0;
+                    const itemSubtotal = price * qty;
+                    subtotal += itemSubtotal;
+                    subtotalSpan.textContent = `$${itemSubtotal.toFixed(2)}`;
+                } else {
+                    subtotalSpan.textContent = `$0.00`;
+                }
+            }
+
+            const tax = 0; // 0% tax
+            const grandTotal = subtotal + tax;
+
+            document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+            document.getElementById('totalOrderAmount').value = grandTotal.toFixed(2);
+
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        // Handle form submission (FIXED: no duplicate function, correct fetch parameters)
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            // Show loading state on button
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const selectedItems = [];
+            for (let i = 1; i <= 8; i++) {
+                const checkbox = document.getElementById(`item${i}`);
+                if (checkbox?.checked) {
+                    const qtyInput = document.getElementById(`qty${i}`);
+                    const row = checkbox.closest('.item-row');
+                    const itemName = row.querySelector('.item-name').textContent;
+                    const price = parseFloat(row.dataset.price);
+                    const qty = parseInt(qtyInput.value) || 1;
+
+                    selectedItems.push({
+                        name: itemName,
+                        price: price,
+                        quantity: qty,
+                        subtotal: (price * qty).toFixed(2)
+                    });
+                }
+            }
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item!');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                return;
+            }
+
+            const formData = {
+                orderNumber: document.getElementById('orderNumber').value,
+                requestedBy: document.getElementById('requestedBy').value,
+                orderDate: document.getElementById('orderDate').value,
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                deliveryLocation: document.getElementById('deliveryLocation').value,
+                items: selectedItems,
+                totalAmount: document.getElementById('totalOrderAmount').value,
+                estimatedDelivery: document.getElementById('estimatedDelivery').value,
+                orderStatus: document.getElementById('orderStatus').value,
+                paymentStatus: document.getElementById('paymentStatus').value,
+                amountCollected: document.getElementById('amountCollected').value || 0,
+                notes: document.getElementById('notes').value || ''
+            };
+
+            try {
+                // FIXED: Correct fetch parameters for native JS
+                const response = await fetch('https://script.google.com/macros/s/AKfycbz8lYU4p4GeiXSA9aElS21I_2qyg4fudEV8qRN10PDFZLAXZMJvadQthe5BgEZPxxE/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.result === "success") {
+                    alert(`✅ Order submitted successfully!\nOrder #: ${formData.orderNumber}`);
+                    window.location.reload(); // Reset form after success
+                } else {
+                    alert("❌ Failed to save order. Please try again.");
+                    console.error(result);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                }
+            } catch (error) {
+                alert("⚠️ Network error. Check connection or try again.");
+                console.error("Error:", error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            generateOrderNumber();
+            setDefaultDates();
+            calculateTotal(); // Initial calculation
+        };
+    </script>
+</body>
+</html>
